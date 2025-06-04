@@ -1,4 +1,4 @@
-#Nome: Gustavo Tiburcio Maia da Silva/ RGM: 1426052130/ Estrutura de Dados I/ Noturno
+# Nome: Gustavo Tiburcio Maia da Silva/ RGM: 1426052130/ Estrutura de Dados I/ Noturno
 
 # Sistema de Gerenciamento de Notas Escolares: 
 
