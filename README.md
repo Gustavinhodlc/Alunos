@@ -1,4 +1,4 @@
-#Sistema de Gerenciamento de Notas Escolares: 
+# Sistema de Gerenciamento de Notas Escolares: 
 
 Ordenação: As notas dos alunos podem ser ordenadas por valor (crescente/decrescente), nome do aluno ou disciplina. Isso facilita a visualização de rankings, a identificação de alunos com melhor ou menor desempenho e a análise de tendências gerais.
 Busca: Professores e administradores precisam buscar rapidamente as notas de um aluno específico, alunos dentro de uma determinada faixa de notas ou notas por disciplina.
