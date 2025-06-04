@@ -1,0 +1,93 @@
+# Lista de alunos
+alunos = [
+    {"nome": "Ana", "disciplina": "Matemática", "nota": 85},
+    {"nome": "Bruno", "disciplina": "História", "nota": 78},
+    {"nome": "Carlos", "disciplina": "Matemática", "nota": 92},
+    {"nome": "Diana", "disciplina": "Ciências", "nota": 88},
+    {"nome": "Eva", "disciplina": "História", "nota": 73},
+    {"nome": "Fábio", "disciplina": "Matemática", "nota": 67},
+]
+
+# Ordena a lista de alunos com base em um critério (nome, disciplina ou nota)
+def ordenar_alunos(alunos, criterio='nota', crescente=True):
+    if criterio == 'nome':
+        return sorted(alunos, key=lambda x: x['nome'], reverse=not crescente)
+    elif criterio == 'disciplina':
+        return sorted(alunos, key=lambda x: x['disciplina'], reverse=not crescente)
+    elif criterio == 'nota':
+        return sorted(alunos, key=lambda x: x['nota'], reverse=not crescente)
+    else:
+        print("Critério inválido.")
+        return alunos
+
+# Faz busca binária por nome na lista ordenada de alunos
+def buscar_aluno_por_nome(alunos, nome):
+    alunos_ordenados = ordenar_alunos(alunos, criterio='nome')
+    esquerda = 0
+    direita = len(alunos_ordenados) - 1
+    while esquerda <= direita:
+        meio = (esquerda + direita) // 2
+        if alunos_ordenados[meio]['nome'] == nome:
+            return alunos_ordenados[meio]
+        elif alunos_ordenados[meio]['nome'] < nome:
+            esquerda = meio + 1
+        else:
+            direita = meio - 1
+    return None
+
+# Retorna os alunos que têm nota dentro de uma faixa informada
+def buscar_por_faixa_de_notas(alunos, nota_min, nota_max):
+    return [aluno for aluno in alunos if nota_min <= aluno['nota'] <= nota_max]
+
+# Retorna os alunos de uma disciplina específica
+def buscar_por_disciplina(alunos, disciplina):
+    return [aluno for aluno in alunos if aluno['disciplina'] == disciplina]
+
+
+#DEIXA O PROGRAMA RODANDO EM LOOP ATÉ QUE SEJA CHAMADA A OPÇÃO 0, A QUAL DEFINE O BREAK DO WHILE
+while True:
+    print("1 - Ordenar alunos por notas decrescentes")
+    print("2 - Ordenar alunos por notas crescentes")
+    print("3 - Buscar aluno por nome")
+    print("4 - Buscar alunos por faixa de notas")
+    print("5 - Buscar alunos por disciplina")
+    print("0 - Sair")
+    
+    # TRY E EXCEPT (CATCH) TRATA STRINGS DIGITADOS EM OPCAO
+    try:
+        opcao = int(input("Escolha uma opção: "))
+    except ValueError:
+        print("Digite um número válido.")
+        continue
+    # PARA USAR O MATCH É RECOMENDADO USAR VERSÕES A PARTIR DO PY 3.10
+    # SEMELHANTE AO SWITCH USADO NA LINGUAGEM C, PODE SER SUBSTITUÍDO POR IF/ELSE
+    match opcao:
+        case 1:
+            alunos_ordenados = ordenar_alunos(alunos, criterio='nota', crescente=False)
+            for aluno in alunos_ordenados:
+                print(aluno)
+        case 2:
+            alunos_ordenados = ordenar_alunos(alunos, criterio='nota', crescente=True)
+            for aluno in alunos_ordenados:
+                print(aluno)
+        case 3:
+            nome = input("Digite o nome do aluno que deseja buscar: ")
+            resultado = buscar_aluno_por_nome(alunos, nome)
+            print(resultado if resultado else "aluno não encontrado")
+        case 4:
+            nota_min = int(input("Nota mínima: "))
+            nota_max = int(input("Nota máxima: "))
+            resultado = buscar_por_faixa_de_notas(alunos, nota_min, nota_max)
+            for aluno in resultado:
+                print(aluno)
+        case 5:
+            disciplina = input("Digite o nome da disciplina: ")
+            resultado = buscar_por_disciplina(alunos, disciplina)
+            for aluno in resultado:
+                print(aluno)
+        case 0:
+            print("Saindo do programa...")
+            break
+        case _:
+            print("Opção inválida")
+print("Obrigado")
