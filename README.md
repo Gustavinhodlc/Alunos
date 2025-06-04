@@ -39,4 +39,3 @@ Insertion Sort
 - Pegamos cada número e o inserimos na posição correta em uma lista parcialmente ordenada.
 - Exemplo de inserção progressiva: [3, 5, 8, 4, 2] → [3, 4, 5, 8, 2] → [2, 3, 4, 5, 8].
 Resultado final: [2, 3, 4, 5, 8].
-Cada algoritmo tem suas vantagens dependendo do cenário! Precisa de uma explicação mais detalhada sobre algum deles? 😃
