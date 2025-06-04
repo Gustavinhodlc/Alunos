@@ -8,16 +8,105 @@ alunos = [
     {"nome": "Fábio", "disciplina": "Matemática", "nota": 67},
 ]
 
-# Ordena a lista de alunos com base em um critério (nome, disciplina ou nota)
-def ordenar_alunos(alunos, criterio='nota', crescente=True):
-    if criterio == 'nome':
-        return sorted(alunos, key=lambda x: x['nome'], reverse=not crescente)
-    elif criterio == 'disciplina':
-        return sorted(alunos, key=lambda x: x['disciplina'], reverse=not crescente)
-    elif criterio == 'nota':
-        return sorted(alunos, key=lambda x: x['nota'], reverse=not crescente)
+# Algoritmos de ordenação
+
+#Conceito de Quick_sort: Utiliza o princípio de divisão e conquista. Escolhe um elemento como pivô, divide o array em dois subarrays (menores e maiores que o pivô) e ordena recursivamente cada parte. É muito eficiente em média
+def quick_sort(arr, key, reverse=False):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x[key] < pivot[key]]
+    middle = [x for x in arr if x[key] == pivot[key]]
+    right = [x for x in arr if x[key] > pivot[key]]
+    sorted_list = quick_sort(left, key) + middle + quick_sort(right, key)
+    return sorted_list[::-1] if reverse else sorted_list
+    
+#Conceito de Marge_sort: - Também baseado em divisão e conquista, divide recursivamente o array em partes menores até que cada uma tenha um único elemento, e depois as combina ordenadamente. Tem uma complexidade sempre previsível de ( O(n \log n) ).
+
+
+def merge_sort(arr, key, reverse=False):
+    if len(arr) <= 1:
+        return arr
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid], key)
+    right = merge_sort(arr[mid:], key)
+    sorted_list = merge(left, right, key)
+    return sorted_list[::-1] if reverse else sorted_list
+
+def merge(left, right, key):
+    result = []
+    while left and right:
+        if left[0][key] < right[0][key]:
+            result.append(left.pop(0))
+        else:
+            result.append(right.pop(0))
+    return result + left + right
+    
+#Conceito de Shell_sort: Uma variação do Insertion Sort que melhora sua eficiência utilizando a inserção em elementos distantes antes de refiná-la em elementos próximos. Reduz a necessidade de deslocamentos repetitivos.
+
+def shell_sort(arr, key, reverse=False):
+    n = len(arr)
+    gap = n // 2
+    while gap > 0:
+        for i in range(gap, n):
+            temp = arr[i]
+            j = i
+            while j >= gap and arr[j - gap][key] > temp[key]:
+                arr[j] = arr[j - gap]
+                j -= gap
+            arr[j] = temp
+        gap //= 2
+    return arr[::-1] if reverse else arr
+    
+#Conceito de Selection_sort: - Seleciona repetidamente o menor (ou maior) elemento e o coloca na posição correta. Simples de entender, mas ineficiente para grandes conjuntos de dados com complexidade ( O(n^2) ).
+
+
+def selection_sort(arr, key, reverse=False):
+    n = len(arr)
+    for i in range(n):
+        min_idx = i
+        for j in range(i + 1, n):
+            if arr[j][key] < arr[min_idx][key]:
+                min_idx = j
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+    return arr[::-1] if reverse else arr
+    
+#Conceito de bubble_sort: Compara e troca pares de elementos adjacentes até que todo o array esteja ordenado. É um dos métodos mais básicos, mas também um dos menos eficientes para listas grandes
+
+def bubble_sort(arr, key, reverse=False):
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if arr[j][key] > arr[j + 1][key]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    return arr[::-1] if reverse else arr
+    
+#Conceito de insertion_sort: Ordena os elementos à medida que percorre o array, inserindo cada um na posição correta entre os já ordenados. Pode ser eficiente para listas pequenas ou quase ordenadas.
+
+def insertion_sort(arr, key, reverse=False):
+    for i in range(1, len(arr)):
+        temp = arr[i]
+        j = i - 1
+        while j >= 0 and arr[j][key] > temp[key]:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = temp
+    return arr[::-1] if reverse else arr
+
+# Modificação na função principal para permitir escolha do método de ordenação
+def ordenar_alunos(alunos, criterio='nota', crescente=True, metodo='quick_sort'):
+    metodos = {
+        'quick_sort': quick_sort,
+        'merge_sort': merge_sort,
+        'shell_sort': shell_sort,
+        'selection_sort': selection_sort,
+        'bubble_sort': bubble_sort,
+        'insertion_sort': insertion_sort
+    }
+    if metodo in metodos:
+        return metodos[metodo](alunos[:], criterio, reverse=not crescente)
     else:
-        print("Critério inválido.")
+        print("Método inválido.")
         return alunos
 
 # Faz busca binária por nome na lista ordenada de alunos
@@ -43,8 +132,7 @@ def buscar_por_faixa_de_notas(alunos, nota_min, nota_max):
 def buscar_por_disciplina(alunos, disciplina):
     return [aluno for aluno in alunos if aluno['disciplina'] == disciplina]
 
-
-#DEIXA O PROGRAMA RODANDO EM LOOP ATÉ QUE SEJA CHAMADA A OPÇÃO 0, A QUAL DEFINE O BREAK DO WHILE
+# Programa interativo
 while True:
     print("1 - Ordenar alunos por notas decrescentes")
     print("2 - Ordenar alunos por notas crescentes")
@@ -53,27 +141,27 @@ while True:
     print("5 - Buscar alunos por disciplina")
     print("0 - Sair")
     
-    # TRY E EXCEPT (CATCH) TRATA STRINGS DIGITADOS EM OPCAO
     try:
         opcao = int(input("Escolha uma opção: "))
     except ValueError:
         print("Digite um número válido.")
         continue
-    # PARA USAR O MATCH É RECOMENDADO USAR VERSÕES A PARTIR DO PY 3.10
-    # SEMELHANTE AO SWITCH USADO NA LINGUAGEM C, PODE SER SUBSTITUÍDO POR IF/ELSE
+    
     match opcao:
         case 1:
-            alunos_ordenados = ordenar_alunos(alunos, criterio='nota', crescente=False)
+            metodo = input("Escolha o método de ordenação (quick_sort, merge_sort, shell_sort, selection_sort, bubble_sort, insertion_sort): ")
+            alunos_ordenados = ordenar_alunos(alunos, criterio='nota', crescente=False, metodo=metodo)
             for aluno in alunos_ordenados:
                 print(aluno)
         case 2:
-            alunos_ordenados = ordenar_alunos(alunos, criterio='nota', crescente=True)
+            metodo = input("Escolha o método de ordenação (quick_sort, merge_sort, shell_sort, selection_sort, bubble_sort, insertion_sort): ")
+            alunos_ordenados = ordenar_alunos(alunos, criterio='nota', crescente=True, metodo=metodo)
             for aluno in alunos_ordenados:
                 print(aluno)
         case 3:
             nome = input("Digite o nome do aluno que deseja buscar: ")
             resultado = buscar_aluno_por_nome(alunos, nome)
-            print(resultado if resultado else "aluno não encontrado")
+            print(resultado if resultado else "Aluno não encontrado")
         case 4:
             nota_min = int(input("Nota mínima: "))
             nota_max = int(input("Nota máxima: "))
@@ -90,4 +178,3 @@ while True:
             break
         case _:
             print("Opção inválida")
-print("Obrigado")
